@@ -1,7 +1,7 @@
 import { configure } from '@storybook/angular';
 
 function loadStories() {
-  require('../src/stories/index.ts');
+  require('./stories/index.stories.ts');
 }
 
 configure(loadStories, module);

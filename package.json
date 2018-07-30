@@ -33,7 +33,7 @@
     "@storybook/angular": "^3.4.8",
     "@types/jasmine": "~2.8.6",
     "@types/jasminewd2": "~2.0.3",
-    "@types/node": "~8.9.4",
+    "@types/node": "^10.5.4",
     "babel-core": "^6.26.3",
     "codelyzer": "~4.2.1",
     "jasmine-core": "~2.99.1",

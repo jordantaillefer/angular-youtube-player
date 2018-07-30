@@ -1,4 +1,9 @@
 {
+  "exclude": [
+    "stories",
+    "**/*.stories.ts",
+    "**/.storybook/**"
+  ],
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
