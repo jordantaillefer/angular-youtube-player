@@ -2,9 +2,9 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  template: `<app-ngx-youtube-player></app-ngx-youtube-player>`,
 })
 export class AppComponent {
-  @Input() title = 'angular-youtube-player';
+  @Input()
+  title = 'angular-youtube-player';
 }
