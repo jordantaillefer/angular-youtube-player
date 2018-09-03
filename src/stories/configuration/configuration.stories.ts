@@ -3,6 +3,10 @@ import { NgxYoutubePlayerComponent } from '../../app/ngx-youtube-player/ngx-yout
 import { CommonModule } from '@angular/common';
 import { PlayerDefaultComponent } from './player-default/player-default.component';
 import { PlayerInitSizeComponent } from './player-init-size/player-init-size.component';
+import { PlayerAutoplayComponent } from './player-autoplay/player-autoplay.component';
+import { PlayerControlsComponent } from './player-controls/player-controls.component';
+import { PlayerKeyboardControlsComponent } from './player-keyboard-controls/player-keyboard-controls.component';
+import { PlayerSoundControlComponent } from './player-sound-control/player-sound-control.component';
 
 storiesOf('Player configuration', module)
   .addDecorator(
@@ -20,14 +24,18 @@ storiesOf('Player configuration', module)
     props: {}
   }))
   .add('Player with autoplay', () => ({
-    component: PlayerInitSizeComponent,
+    component: PlayerAutoplayComponent,
     props: {}
   }))
   .add('Player with controls', () => ({
-    component: PlayerInitSizeComponent,
+    component: PlayerControlsComponent,
     props: {}
   }))
   .add('Player with keyboard controls', () => ({
-    component: PlayerInitSizeComponent,
+    component: PlayerKeyboardControlsComponent,
+    props: {}
+  }))
+  .add('Player with sound control', () => ({
+    component: PlayerSoundControlComponent,
     props: {}
   }));

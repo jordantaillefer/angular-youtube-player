@@ -1,15 +1,30 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-ngx-youtube-player',
   template: `<div id="player"></div>`,
 })
 export class NgxYoutubePlayerComponent implements OnInit {
-  public YT: any;
-  public video: any;
-  public player: any;
+  private YT: any;
+  private _player: any;
+  @Output() ready = new EventEmitter<any>();
+  @Output() stateChange = new EventEmitter<any>();
+  @Output() error = new EventEmitter<any>();
+
   @Input() width = 640;
   @Input() height = 360;
+  @Input() autoplay = false;
+  @Input() videoId: string;
+  @Input() controls = true;
+  @Input() kbcontrols = true;
+  @Input()
+  set volume(volume: number) {
+    this._volume = volume;
+    if (this._player) {
+      this._player.setVolume(this._volume);
+    }
+  }
+  _volume = 50;
   youtubeScript: HTMLScriptElement;
   scriptLoaded = false;
 
@@ -25,7 +40,6 @@ export class NgxYoutubePlayerComponent implements OnInit {
       tag.src = 'https://www.youtube.com/iframe_api';
       const firstScriptTag = document.getElementsByTagName('script')[0];
       this.youtubeScript = firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-      this.video = '4thvxNoyUKo';
 
       window['onYouTubeIframeAPIReady'] = e => {
         this._loadPlayer();
@@ -38,69 +52,47 @@ export class NgxYoutubePlayerComponent implements OnInit {
 
   _loadPlayer() {
     this.YT = window['YT'];
-    this.player = new window['YT'].Player('player', {
+    this._player = new window['YT'].Player('player', {
       width: this.width,
       height: this.height,
       playerVars: {
-        enablejsapi: 1,
-        controls: 0,
-        disablekb: 0,
-        autoplay: 0,
+        controls: this.controls ? 1 : 0,
+        disablekb: this.kbcontrols ? 1 : 0,
+        autoplay: this.autoplay ? 1 : 0
       },
-      videoId: '4thvxNoyUKo',
+      videoId: this.videoId,
       events: {
         onStateChange: this.onPlayerStateChange.bind(this),
         onError: this.onPlayerError.bind(this),
-        onReady: event => { }
+        onReady: this.onPlayerReady.bind(this)
       }
     });
   }
 
+  onPlayerReady(event) {
+    this.ready.emit(event);
+  }
 
   onPlayerStateChange(event) {
     console.log(event);
-    switch (event.data) {
-      case window['YT'].PlayerState.PLAYING:
-        if (this.cleanTime() === 0) {
-          console.log('started ' + this.cleanTime());
-        } else {
-          console.log('playing ' + this.cleanTime());
-        }
-        break;
-      case window['YT'].PlayerState.PAUSED:
-        if (this.player.getDuration() - this.player.getCurrentTime() !== 0) {
-          console.log('paused' + ' @ ' + this.cleanTime());
-        }
-        break;
-      case window['YT'].PlayerState.ENDED:
-        console.log('ended ');
-        break;
-    }
+    this.stateChange.emit(event);
   }
 
   nextVideo() {
-    this.player.nextVideo();
+    this._player.nextVideo();
   }
 
   shufflePlaylist() {
-    this.player.setShuffle(true);
+    this._player.setShuffle(true);
   }
 
   // utility
   cleanTime() {
-    return Math.round(this.player.getCurrentTime());
+    return Math.round(this._player.getCurrentTime());
   }
 
   onPlayerError(event) {
     console.log('event', event);
-    switch (event.data) {
-      case 2:
-        console.log('' + this.video);
-        break;
-      case 100:
-        break;
-      case 101 || 150:
-        break;
-    }
+    this.error.emit(event);
   }
 }
